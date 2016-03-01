@@ -1,0 +1,364 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Diamond Game</title>
+		<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+	</head>
+		<style>
+			body {background: url("background_img.jpg");
+			}
+
+			#masthead{ background-color: orange;
+					width: 270px;
+			}
+
+			#logo {
+					width: 100%;
+
+			}
+
+			#rules {
+				background-color: beige;
+				color: green;
+
+
+			}
+
+			#instructions{
+				background-color: beige;
+				width: 330px;
+				height: 330px;
+			}
+
+			#targetDiv{
+				width: 170px;
+				height: 90px;
+				background: green;
+				float: left;
+				padding: 5px;
+				margin: 10px;
+			}
+
+			#targetNumber {
+				float: left;
+				color: purple;
+
+
+			}
+			#record{
+				height: 90px;
+				width: 60px;
+				float: left;
+				background: aqua;
+				padding: 5px;
+				margin: 10px;
+
+			}
+
+		/*	.wL{
+				height: 90px;
+				width: 60px;
+				float: left;
+				background: aqua;
+				padding: 5px;
+				margin: 10px;
+
+			}*/
+
+			#infoSection {
+				float:left;
+				clear: both;
+			}
+
+			#imgContainer{
+				clear: both;
+				float: left;
+			}
+
+			.yourInfo {
+				background-color: teal;
+				color: white;
+				clear: both;
+				float: left;
+				width: 180px;
+				margin: 5px;
+
+			}
+
+			#scoreSent {
+
+			}
+
+			#yourScore{
+				height: 90px;
+			}
+
+			#jewel{
+				width: 65px;
+				height: 65px;
+			}
+
+
+
+		</style>
+	<body>
+		<div id="container">
+			<div id="masthead">
+				<h1 id="logo">CrystalsCollector!</h1>
+			</div>
+			<div id="instructions">
+				<p1 id="rules">
+					You will be given a random number at the start of the game.
+						<br>
+						<br>
+					There are four crystals below. By clicking on a crystal you will add a specific amount of points to your total score.
+					<br><br>
+					You win the game by matching your total score to the random unmber, you lose the game if your total score goes above the random number.<br><br>The value of each crystal is hidden from you until you click on it.<br><br>Each time when the game starts, teh game will change the values of each crystal.
+				</p1>
+			</div>
+			<div id="infoSection">
+				<div id="targetDiv">
+					<h1 id="targetNumber">number</h1>
+				</div>
+				<div id="record">
+					Wins: 
+					<p class="wL" id="wins">
+						0
+					</p>
+						<br><br>
+						Losses:
+					<p class="wL" id="losses">
+					0
+					</p>
+				</div>
+			</div>
+			<div id="imgContainer">
+				<img class="jewel" id="redCrystal" src="red.png">
+				<img class ="jewel" id="greenCrystal" src="green.png">
+				<img class="jewel" id="blueCrystal" src= "blue.png">
+				<img class="jewel" id="yellowCrystal" src="yellow.png">
+			</div>
+			<div class = "yourInfo" id="scoreSent">
+				Your total score is:
+			</div><br><br>
+			<div class="yourInfo" id="yourScore">
+				<h1 id="userScore"> 0 </h1>
+			</div>
+		</div>
+
+
+<!-- SCRIPT -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+
+
+<script type="text/javascript">
+
+var numberList = []; 
+var targetedNumber = "";
+// var crystalList = [];
+var redCrystalNum = "";
+var blueCrystalNum = "";
+var greenCrystalNum = "";
+var yellowCrystalNum = "";
+var crystalList = [];
+	for(var i=1; i<=12; i++){
+		crystalList.push(i);
+	};
+
+var score=0;
+var winNum = 0;
+var lossNum = 0;
+
+function createCrystals(){
+	var redCrystal = $('<img>');
+		redCrystal.attr('data-num', crystalList[i]);
+		redCrystal.attr('src', 'assets/images/red.png');
+		redCrystal.attr('alt', 'red crystal');
+		redCrystal.addClass('center-block');
+		redCrystal.addClass('crystalImage');
+		$('#redCrystal').append(redCrystal);
+
+	var blueCrystal = $('<img>');
+		blueCrystal.attr('data-num', crystalList[i]);
+		blueCrystal.attr('src', 'assets/images/blue.png');
+		blueCrystal.attr('alt', 'blue crystal');
+		blueCrystal.addClass('center-block');
+		blueCrystal.addClass('crystalImage');
+		$('#blueCrystal').append(blueCrystal);
+
+
+	var yellowCrystal = $('<img>');
+		yellowCrystal.attr('data-num', crystalList[i]);
+		yellowCrystal.attr('src', 'assets/images/yellow.png');
+		yellowCrystal.attr('alt', 'yellow crystal');
+		yellowCrystal.addClass('center-block');
+		yellowCrystal.addClass('crystalImage');
+		$('#yellowCrystal').append(yellowCrystal);
+
+	var greenCrystal = $('<img>');
+		greenCrystal.attr('data-num', crystalList[i]);
+		greenCrystal.attr('src', 'assets/images/green.png');
+		greenCrystal.attr('alt', 'green crystal');
+		greenCrystal.addClass('center-block');
+		greenCrystal.addClass('crystalImage');
+		$('#greenCrystal').append(greenCrystal);
+
+}
+
+
+function startGame(){
+	// this creates the list of numbers from 19 through 120 
+	var numberList = [];
+		for(var i=19; i<=120; i++){
+			numberList.push(i);
+		}
+	var targetedNumber = numberList[Math.floor(Math.random() * numberList.length)];
+	console.log(targetedNumber); //selected number to reach
+	//this creates the list of crystal values from 1 through 12
+	//this places te targetedNumber on the html page
+	$('#targetNumber').text(targetedNumber);
+	
+
+
+	$('#userScore').text(score);
+// assign crystal #s
+	var redCrystalNum = crystalList[Math.floor(Math.random() * crystalList.length)];
+
+
+
+	var blueCrystalNum = crystalList[Math.floor(Math.random() * 
+		crystalList.length)];
+
+
+
+	var greenCrystalNum = crystalList[Math.floor(Math.random() * crystalList.length)];
+
+
+
+	var yellowCrystalNum = crystalList[Math.floor(Math.random() * crystalList.length)];
+
+	score = 0;
+
+
+	$('#wins').text(winNum);
+	$('#losses').text(lossNum);
+	$('#userScore').text(score);
+
+// clicks events
+
+	$('#redCrystal').on('click', function () {
+      score = score + redCrystalNum;
+	 	$('#userScore').text(score);
+		if(score == targetedNumber){
+		 	winNum++;
+			alert('nice! you won!');
+			$('#wins').html(winNum);
+			$('#targetNumber').text(targetedNumber);
+			$('#userScore').text(score);
+			startGame();
+		}else if(score > targetedNumber){
+			lossNum++;
+			alert('you did not win! sorry!');
+			$('#losses').html(lossNum);
+			$('#targetNumber').text(targetedNumber);
+			$('#userScore').text(score);
+			startGame();
+		}
+	})
+
+	$('#blueCrystal').on('click', function () {
+      score = score + blueCrystalNum;
+	 	$('#userScore').text(score);
+		if(score == targetedNumber){
+		 	winNum++;
+			alert('nice! you won!');
+			$('#wins').html(winNum);
+			$('#targetNumber').text(targetedNumber);
+			$('#userScore').text(score);
+			startGame();
+		}else if(score > targetedNumber){
+			lossNum++;
+			alert('You did not win, sorry!');
+			$('#losses').html(lossNum);
+			$('#targetNumber').text(targetedNumber);
+			$('#userScore').text(score);
+			startGame();
+		}
+	})
+	$('#yellowCrystal').on('click', function () {
+      score = score + yellowCrystalNum;
+	 	$('#userScore').text(score);
+		if(score == targetedNumber){
+		 	winNum++;
+			alert('nice! you won!');
+			$('#wins').html(winNum);
+			$('#targetNumber').text(targetedNumber);
+			$('#userScore').text(score);
+			startGame();
+		}else if(score > targetedNumber){
+			lossNum++;
+			alert('You did not win, sorry!');
+			$('#losses').html(lossNum);
+			$('#targetNumber').text(targetedNumber);
+			$('#userScore').text(score);
+			startGame();
+		}
+	})
+	$('#greenCrystal').on('click', function () {
+      score = score + greenCrystalNum;
+
+	 	$('#userScore').text(score);
+	 	if(score == targetedNumber){
+		 	winNum++;
+			alert('Nice, you won!');
+			$('#wins').html(winNum);
+			$('#targetNumber').text(targetedNumber);
+			$('#userScore').text(score);
+			startGame();
+		}else if(score > targetedNumber){
+			lossNum++;
+			alert('You lost, sorry!');
+			$('#losses').html(lossNum);
+			$('#targetNumber').text(targetedNumber);
+			$('#userScore').text(score);
+			startGame();
+		}
+	})
+}
+ 
+
+function roundComplete () {
+	console.log("Wins Count: " +winNum+ "| Loss Count: " +lossNum);
+
+	if(score == targetedNumber){
+	 	winNum++;
+		alert('You won! Nice!');
+		$('#wins').html(winNum);
+		$('#targetNumber').text(targetedNumber);
+
+		startGame();
+	}else if(score > targetedNumber){
+		lossNum++;
+		alert('Did not win, sorry!');
+		$('#losses').html(lossNum);
+		$('#targetNumber').text(targetedNumber);
+		startGame();
+	}
+}
+
+createCrystals();
+startGame();
+
+
+
+
+
+</script>
+
+
+
+
+	
+	</body>
+</html>
